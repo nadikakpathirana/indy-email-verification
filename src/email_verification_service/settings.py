@@ -181,3 +181,9 @@ EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL") == "true"
 
 # Gunicorn options
 timeout = 300
+
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
