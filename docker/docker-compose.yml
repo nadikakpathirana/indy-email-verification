@@ -36,54 +36,55 @@ services:
         --admin '0.0.0.0' 5000",
       ]
 
-  email-verifier-service:
-    restart: always
-    image: email-verification-service
-    depends_on:
-      - email-verifier-postgres
-      - email-verifier-agent
-    environment:
-      PORT: 8080
-      SITE_URL: http://<Server-URL>:8080
-      AGENT_URL: "http://email-verifier-agent:5000"
-      DEBUG: "true"
-      DB_NAME: postgres
-      DB_USER: postgres
-      DB_PASSWORD: password
-      DB_PORT: 5432
-      DB_HOST: email-verifier-postgres
-      EMAIL_HOST: maildev
-      EMAIL_PORT: 25
-      EMAIL_USE_SSL: "false"
-      STI_SCRIPTS_PATH: "/usr/libexec/s2i"
-      APP_HOME: "email_verification_service"
-      WEB_CONCURRENCY: 1
-    ports:
-      - 8080:8080
-    # command: bash -c "sleep 5 && ./manage.py makemigrations &&./manage.py migrate && ./manage.py runserver 0.0.0.0:$${PORT}"
-    command: >
-      bash -c "
-      echo waiting for aca-py ...;
-      sleep 5;
-      python ./manage.py migrate;
-      $${STI_SCRIPTS_PATH}/run;"
-    volumes:
-      - ../src:/app
+#  email-verifier-service:
+#    restart: always
+#    image: email-verification-service
+#    depends_on:
+#      - email-verifier-postgres
+#      - email-verifier-agent
+#    environment:
+#      PORT: 8080
+#      SITE_URL: http://<Server-URL>:8080
+#      AGENT_URL: "http://email-verifier-agent:5000"
+#      DEBUG: "true"
+#      DB_NAME: postgres
+#      DB_USER: postgres
+#      DB_PASSWORD: password
+#      DB_PORT: 5432
+#      DB_HOST: email-verifier-postgres
+#      EMAIL_HOST: maildev
+#      EMAIL_PORT: 25
+#      EMAIL_USE_SSL: "false"
+#      STI_SCRIPTS_PATH: "/usr/libexec/s2i"
+#      APP_HOME: "email_verification_service"
+#      WEB_CONCURRENCY: 1
+#    ports:
+#      - 8080:8080
+#    # command: bash -c "sleep 5 && ./manage.py makemigrations &&./manage.py migrate && ./manage.py runserver 0.0.0.0:$${PORT}"
+#    command: >
+#      bash -c "
+#      echo waiting for aca-py ...;
+#      sleep 5;
+#      python ./manage.py migrate;
+#      $${STI_SCRIPTS_PATH}/run;"
+#    volumes:
+#      - ../src:/app
 
-  email-verifier-postgres:
-    restart: always
-    image: postgres:10
-    volumes:
-      - /var/lib/postgresql
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+#  email-verifier-postgres:
+#    restart: always
+#    image: postgres:10
+#    volumes:
+#      - /var/lib/postgresql
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: password
 
   maildev:
     image: djfarrelly/maildev
     ports:
       - "8050:80"
+      - "25:25"
 
 volumes:
   django:

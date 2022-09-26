@@ -52,22 +52,26 @@ echo ""
 
 IP4=$(/sbin/ip -o -4 addr list wlp1s0 | awk '{print $4}' | cut -d/ -f1)
 
-AGENT_WALLET_SEED="01234567890123456789012345678901"
-
 #SITE_URL=http://$IP4:8080
 SITE_URL=http://$IP4:10000
 echo $SITE_URL
 
+AGENT_WALLET_SEED="01234567890123456789012345678912"
+
 export PORT=8080
 #SITE_URL: http://<Server-URL>:8080
 export SITE_URL=$SITE_URL
-export AGENT_URL="http://email-verifier-agent:5000"
+export AGENT_WALLET_SEED=$AGENT_WALLET_SEED
+export AGENT_URL="http://localhost:5000"
 export DEBUG="true"
-export DB_NAME=postgres
-export DB_USER=postgres
-export DB_PASSWORD=password
+
+# change here
+export DB_NAME=email_verification_db
+export DB_USER=admin
+export DB_PASSWORD="admin"
 export DB_PORT=5432
-export DB_HOST=email-verifier-postgres
+export DB_HOST=localhost
+
 export EMAIL_HOST=maildev
 export EMAIL_PORT=25
 export EMAIL_USE_SSL="false"
@@ -183,5 +187,5 @@ echo $_startupParams
 
 echo waiting for aca-py
 sleep 5
-python ./manage.py migrate
-python ./manage.py runserver
+python manage.py migrate
+python manage.py runserver 8080

@@ -5,6 +5,15 @@ export MSYS_NO_PATHCONV=1
 export DOCKERHOST=$(getDockerHost)
 set -e
 
+IP4=$(/sbin/ip -o -4 addr list wlp1s0 | awk '{print $4}' | cut -d/ -f1)
+echo $IP4
+
+AGENT_WALLET_SEED="01234567890123456789012345678912"
+SITE_URL=http://$IP4:10000
+
+export AGENT_WALLET_SEED=$AGENT_WALLET_SEED
+export SITE_URL=$SITE_URL
+
 function echoError (){
   _msg=${1}
   _red='\e[31m'
@@ -154,7 +163,7 @@ build-email-verification-service() {
 }
 
 buildImages() {
-  build-email-verification-service
+#  build-email-verification-service
   build-aries-cloudagent
 }
 
